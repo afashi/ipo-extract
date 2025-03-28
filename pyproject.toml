@@ -1,0 +1,10 @@
+[project]
+name = "ipo-extract"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "openpyxl",
+    "requests",
+    "urllib3",
+]
