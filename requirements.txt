@@ -1,8 +1,0 @@
-# 下载PDF文件的Excel处理工具依赖
-openpyxl==3.1.2     # Excel文件处理
-requests==2.32.0    # HTTP请求库
-urllib3==2.2.2      # URL处理（requests的依赖）
-
-# 开发环境额外推荐（非必需）
-# python-dotenv==1.0.0  # 环境变量管理（如需）
-# tqdm==4.66.1         # 进度条显示（如需可视化进度）

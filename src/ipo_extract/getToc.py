@@ -52,7 +52,7 @@ def process_pdf_folder(folder_path, output_excel="../../result/toc_list.xlsx"):
 
 if __name__ == "__main__":
     # 设置 PDF 文件夹路径
-    pdf_folder = 'report'
+    pdf_folder = '../../result/report'
 
     # 检查路径是否存在
     process_pdf_folder(pdf_folder)

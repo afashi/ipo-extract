@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import time
 
 # 全局配置
-MAX_RETRIES = 1  # 最大重试次数
+MAX_RETRIES = 2  # 最大重试次数
 TIMEOUT = 30  # 单次请求超时时间（秒）
 THREADS = 5  # 线程数
 
