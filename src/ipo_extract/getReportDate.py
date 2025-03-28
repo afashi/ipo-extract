@@ -88,7 +88,7 @@ def process_pdf_file(filepath):
         print(f"处理文件 {filepath} 时出错: {e}")
         return (os.path.basename(filepath), "错误", "N/A", [str(e)])
     finally:
-        if 'doc' in locals():
+        if 'docs' in locals():
             doc.close()
 
 
@@ -149,8 +149,8 @@ def process_pdf_folder(folder_path, output_excel):
 
 if __name__ == "__main__":
     # 设置文件夹路径和输出Excel文件名
-    pdf_folder = 'report'
-    excel_output = "result.xlsx"
+    pdf_folder = '../../result/report'
+    excel_output = "../../result/getReportDate.xlsx"
 
     # 检查文件夹是否存在
     if not os.path.isdir(pdf_folder):

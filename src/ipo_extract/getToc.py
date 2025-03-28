@@ -16,7 +16,7 @@ def get_pdf_bookmarks(pdf_path):
         return [(1, f"读取错误: {str(e)}", 0)]
 
 
-def process_pdf_folder(folder_path, output_excel="toc_list.xlsx"):
+def process_pdf_folder(folder_path, output_excel="../../result/toc_list.xlsx"):
     """
     处理文件夹中的所有 PDF 文件
     """

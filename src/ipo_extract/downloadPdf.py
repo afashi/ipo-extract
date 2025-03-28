@@ -103,8 +103,8 @@ def process_excel(excel_path):
 
 
 def main():
-    excel_path = "IpoFileList.xlsx"
-    save_folder = "report"
+    excel_path = "../../docs/IpoFileList.xlsx"
+    save_folder = "../../result/report"
 
     if not os.path.exists(excel_path):
         print("错误: Excel文件不存在")
