@@ -20,9 +20,9 @@ main_pattern = re.compile(
     r'^\(?(一|二|三|四|五|六|七|八|九|十|十一|十二|十三|十四|十五|十六)、?\)?\s*(重要会计政策及会计估计|税项|会计政策和会计估计变更以及前期差错更正的说明|(合并)?财务报表(主要)?项目(注释|附注)|研发支出|合并范围的(变更|变动)|在其他主体中的权益)$')
 target_pattern = re.compile(r'^(合并)?财务报表(主要)?项目(注释|附注)$')
 table1_pattern_start = re.compile(r'(重要)?在建工程(项目)?(本期|本年)?变动情况')
-table1_pattern2_start = re.compile(r'\d{0,2}、?\s*在建工程')
+table1_pattern2_start = re.compile(r'\d{1,2}、?\s*在建工程')
 table2_pattern_end = re.compile(
-    r'"在建工程减值准备情况|在建工程的减值测试情况|工程物资|生产性生物资产|无形资产|递延所得税资产|使用权资产|长期待摊费用')
+    r'在建工程减值准备情况|在建工程的减值测试情况|工程物资|生产性生物资产|无形资产|递延所得税资产|使用权资产|长期待摊费用')
 
 
 def process_pdf(pdf_path):
@@ -133,6 +133,10 @@ def getTable1(pdf, start_page, end_page):
                 matches = table1_pattern2_start.findall(text_clean)
                 for match in matches:
                     table1_start2_pages.append(start_page + page_num)
+                if (len(table1_start2_pages) > 0
+                        and table1_end_page is None
+                        and table2_pattern_end.search(text_clean) is not None):
+                    table1_end_page = start_page + page_num
     return table1_end_page, table1_start2_pages, table1_start_pages
 
 
@@ -155,6 +159,11 @@ def main(folder_path, output_file):
         for f in os.listdir(folder_path)
         if f.lower().endswith('.pdf')
     ]
+    pdf_files = list(
+        filter(lambda s:
+               "安徽安凯汽车股份有限公司.pdf" in s or
+               "111.pdf" in s, pdf_files))
+
     counter = Value("i", 0)  # 主进程创建共享变量
     lock = Lock()  # 主进程创建锁
     # 多线程处理
