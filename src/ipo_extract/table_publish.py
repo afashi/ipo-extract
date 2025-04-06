@@ -2,6 +2,7 @@ import concurrent
 import logging
 import os
 import re
+import llmChat
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from multiprocessing import Value, Lock
 
@@ -21,7 +22,7 @@ main_pattern = re.compile(
 target_pattern = re.compile(r'^(合并)?财务报表(主要)?项目(注释|附注)$')
 table1_pattern_start = re.compile(r'(重要)?在建工程(项目)?(本期|本年)?变动情况')
 table1_pattern2_start = re.compile(r'\d{1,2}、?\s*在建工程')
-table2_pattern_end = re.compile(
+table1_pattern_end = re.compile(
     r'在建工程减值准备情况|在建工程的减值测试情况|工程物资|生产性生物资产|无形资产|递延所得税资产|使用权资产|长期待摊费用')
 
 
@@ -78,6 +79,18 @@ def process_pdf(pdf_path):
 
         table1_end_page, table1_start2_pages, table1_start_pages = getTable1(pdf, target_page, next_page)
 
+        full_text = ""
+        if len(table1_start_pages) < 1:
+            table1_start_pages = table1_start2_pages
+
+        print(f"{table1_start_pages}:{table1_end_page}")
+
+        if table1_end_page is not None and len(table1_start_pages) > 0:
+            for page in pdf.pages[table1_start_pages[0] - 1:table1_end_page]:
+                text = page.extract_text(keep_blank_chars=True, x_tolerance=40)
+                full_text += text
+        print(f"full_text:{full_text}")
+        reasoning_content, answer_content, completion_usage = llmChat.chat_completion(full_text)
         with lock:
             counter.value += 1
             print(f"{counter.value}.{filename}")
@@ -89,7 +102,12 @@ def process_pdf(pdf_path):
             '下一个标题的页码': next_page,
             '重要在建工程变动情况的开始页码': table1_start_pages,
             '在建工程开始页码': table1_start2_pages,
-            '重要在建工程变动情况的结束页码': table1_end_page
+            '重要在建工程变动情况的结束页码': table1_end_page,
+            '引用全文': full_text,
+            '思考过程': reasoning_content,
+            '大模型回答': answer_content,
+            '大模型输入tokens': completion_usage.completion_tokens,
+            '大模型输出tokens': completion_usage.prompt_tokens
         }
 
     except Exception as e:
@@ -121,7 +139,7 @@ def getTable1(pdf, start_page, end_page):
                     table1_start_pages.append(start_page + page_num)
                 if (len(table1_start_pages) > 0
                         and table1_end_page is None
-                        and table2_pattern_end.search(text_clean) is not None):
+                        and table1_pattern_end.search(text_clean) is not None):
                     table1_end_page = start_page + page_num
     if len(table1_start_pages) < 1 and len(table1_start2_pages) < 1:
         for page_num, page in enumerate(pdf.pages[start_page - 1:end_page - 1]):
@@ -135,7 +153,7 @@ def getTable1(pdf, start_page, end_page):
                     table1_start2_pages.append(start_page + page_num)
                 if (len(table1_start2_pages) > 0
                         and table1_end_page is None
-                        and table2_pattern_end.search(text_clean) is not None):
+                        and table1_pattern_end.search(text_clean) is not None):
                     table1_end_page = start_page + page_num
     return table1_end_page, table1_start2_pages, table1_start_pages
 
@@ -159,10 +177,10 @@ def main(folder_path, output_file):
         for f in os.listdir(folder_path)
         if f.lower().endswith('.pdf')
     ]
-    pdf_files = list(
-        filter(lambda s:
-               "安徽安凯汽车股份有限公司.pdf" in s or
-               "111.pdf" in s, pdf_files))
+    # pdf_files = list(
+    #     filter(lambda s:
+    #            "安徽安凯汽车股份有限公司.pdf" in s or
+    #            "111.pdf" in s, pdf_files))
 
     counter = Value("i", 0)  # 主进程创建共享变量
     lock = Lock()  # 主进程创建锁
