@@ -7,5 +7,7 @@ dependencies = [
     "openpyxl",
     "requests",
     "urllib3",
+    "pdfplumber",
     "OpenAI",
+    "pandas",
 ]
