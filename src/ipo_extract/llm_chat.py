@@ -1,5 +1,7 @@
 from openai import OpenAI
 
+from src.ipo_extract import prompt_constants
+
 prompt11 = """
 #### 定位
 - 智能助手名称 ：数据采集员
@@ -55,9 +57,32 @@ prompt12 = """
   - 账面价值
 
 #### 任务材料
+
+"""
+prompt13 = """
+#### 定位
+- 智能助手名称 ：数据采集员
+- 主要任务 ：对任务材料中的上市公司年度财报的内容进行分析，判断该内容片段是否披露《按预付对象归集的期末余额前五名的预付款情况》的表格。
+
+#### 能力
+- 文本分析 ：
+  - 能够准确识别《按预付对象归集的期末余额前五名的预付款情况》的章节，不受其他章节干扰。
+  - 能够准确识别《按预付对象归集的期末余额前五名的预付款情况》的章节下，是否存在相应表格。
+  - 能够准确分辨《按预付对象归集的期末余额前五名的预付款情况》下的表格是否有被拆分成多个表格的情况，能结合被拆分的表格统一进行分析。
+  - 能够准确分析《按预付对象归集的期末余额前五名的预付款情况》下的表格，是否披露相应表格，分析是否包含表头和数据，都包含则视为披露，如果只有表头没有任何数据则视为未披露。
+  - 能够准确分析《按预付对象归集的期末余额前五名的预付款情况》的章节下，如没有表格则需要判断是否标注不适用，未披露情况下一般会标注不适用。披露情况下一般会不标注或标注适用。
+  - 能够分析出自己是否能对这次任务做出准确判断，如数据披露过少，表头部分确实等无法做出准确判断则该认为需要人工介入
+
+#### 知识储备
+- 财务知识 ：《按预付对象归集的期末余额前五名的预付款情况》一般包含以下大部分内容
+  - 单位名称
+  - 期末余额或者余额
+  - 占预付款项期末余额合计数的比例
+
+#### 任务材料
 """
 
-prompt1s = [prompt11, prompt12]
+prompt1s = [prompt11, prompt12, prompt13]
 
 prompt2 = """
 #### 输出说明
@@ -71,17 +96,19 @@ client = OpenAI(
 )
 
 
-def chat_completion(message, i=0):
+def chat_completion(message, prompt):
     # 初始化OpenAI客户端
     reasoning_content = ""  # 定义完整思考过程
     answer_content = ""  # 定义完整回复
+    completion_tokens = 0  # 定义完整回复
+    prompt_tokens = 0  # 定义完整回复
     last = None  # 定义完整回复
     is_answering = False  # 判断是否结束思考过程并开始回复
     # 创建聊天完成请求
     completion = client.chat.completions.create(
         model="qwq-32b",  # 此处以 qwq-32b 为例，可按需更换模型名称
         messages=[
-            {"role": "user", "content": prompt1s[i] + message + prompt2}
+            {"role": "user", "content": prompt + message + prompt_constants.prompt2}
         ],
         # QwQ 模型仅支持流式输出方式调用
         stream=True,
@@ -94,6 +121,7 @@ def chat_completion(message, i=0):
         # 如果chunk.choices为空，则打印usage
         if not chunk.choices:
             last = chunk.usage
+            completion_tokens, prompt_tokens = last.completion_tokens, last.prompt_tokens
         else:
             delta = chunk.choices[0].delta
             # 打印思考过程
@@ -105,7 +133,7 @@ def chat_completion(message, i=0):
                     is_answering = True
                 # 打印回复过程
                 answer_content += delta.content
-    return reasoning_content, answer_content, last
+    return reasoning_content, answer_content, completion_tokens, prompt_tokens
 
 #
 # if __name__ == '__main__':
