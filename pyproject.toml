@@ -10,4 +10,8 @@ dependencies = [
     "pdfplumber",
     "OpenAI",
     "pandas",
+    "dotenv",
+    "loguru>=0.7.3",
+    "paramiko>=3.5.1",
+    "psycopg2>=2.9.10",
 ]

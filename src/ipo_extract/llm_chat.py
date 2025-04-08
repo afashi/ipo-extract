@@ -1,10 +1,11 @@
 from openai import OpenAI
 
-from src.ipo_extract import prompt_constants
+import prompt_constants
+import config
 
 client = OpenAI(
     # 如果没有配置环境变量，请用百炼API Key替换：api_key="sk-xxx"
-    api_key="sk-22",
+    api_key=config.config["api_key"],
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
 )
 

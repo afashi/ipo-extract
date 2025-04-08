@@ -1,5 +1,5 @@
 from enum import Enum
-from src.ipo_extract import re_pattern, prompt_constants
+import re_pattern, prompt_constants
 
 
 class TableConfigEnum(Enum):

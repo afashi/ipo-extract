@@ -11,8 +11,8 @@ from multiprocessing import Value, Lock
 import pandas as pd
 import pdfplumber
 
-from src.ipo_extract import common_constants, llm_chat
-from src.ipo_extract import table_config
+import common_constants, llm_chat
+import table_config
 
 
 class TableResult:
@@ -30,18 +30,17 @@ class TableResult:
         self.table_end_page = table_end_page
 
 
-def process_pdf(pdf_path):
+def process_pdf(pdf_path, enable_llm):
     """处理单个PDF文件（含异常处理）"""
+    start_time1 = time.time()  # 记录开始时间
+    filename = os.path.basename(pdf_path)
+    second_all_title = {}
     try:
         # 1、遍历表格配置
         # 2、获取所有二级标题，如果没有就添加，页码和目标的标题
         # 3、判断二级标题是否连续
         # 4、如果连续获取表格所在的二级标题页码和二级标题下一级的页码
-        start_time1 = time.time()  # 记录开始时间
-        filename = os.path.basename(pdf_path)
-        second_all_title = {}
         with pdfplumber.open(pdf_path) as pdf:
-
             for key, value in table_config.second_title_all_map.items():
                 if second_all_title.get(key) is None:
                     all_titles = get_all_titles(pdf, value)
@@ -66,7 +65,7 @@ def process_pdf(pdf_path):
                                                                                                  config.parent_start_pattern,
                                                                                                  config.end_pattern)
                     full_text = get_full_text(pdf, table_start_pages, table_parent_start_pages, table_end_page)
-                    if len(full_text) > 0:
+                    if enable_llm and len(full_text) > 0:
                         reasoning_content, answer_content, completion_tokens, prompt_tokens = llm_chat.chat_completion(
                             full_text,
                             config.prompt)
@@ -103,6 +102,12 @@ def process_pdf(pdf_path):
     except Exception as e:
         error_msg = traceback.format_exc()
         print(f'{os.path.basename(pdf_path)}出错了:{e},{error_msg}')
+        table_result[config.cn_name] = {
+            '文件名': filename,
+            '全部二级标题': second_all_title[config.second_title_all]["all_titles"],
+            '出错': error_msg
+        }
+        return table_result
 
 
 def is_num_continuous(all_titles):
@@ -183,21 +188,21 @@ def get_table(pdf, start_page, end_page, table_pattern_start, table_parent_patte
                             and table_end_page is None
                             and table_pattern_end.search(text_clean) is not None):
                         table_end_page = start_page + page_num
-    if len(table_start_pages) < 1 and len(table_start2_pages) < 1:
-        for page_num, page in enumerate(pdf.pages[start_page - 1:end_page - 1]):
-            words = page.extract_words(keep_blank_chars=True, x_tolerance=40)
-            for word in words:
-                # 提取文案
-                word_text = word.get('text').replace(" ", "")
-                if word_text:
-                    text_clean = re.sub(r'\s+', ' ', word_text).strip()
-                    matches = table_parent_pattern_start.findall(text_clean)
-                    for match in matches:
-                        table_start2_pages.append(start_page + page_num)
-                    if (len(table_start2_pages) > 0
-                            and table_end_page is None
-                            and table_pattern_end.search(text_clean) is not None):
-                        table_end_page = start_page + page_num
+        if len(table_start_pages) < 1 and len(table_start2_pages) < 1:
+            for page_num, page in enumerate(pdf.pages[start_page - 1:end_page - 1]):
+                words = page.extract_words(keep_blank_chars=True, x_tolerance=40)
+                for word in words:
+                    # 提取文案
+                    word_text = word.get('text').replace(" ", "")
+                    if word_text:
+                        text_clean = re.sub(r'\s+', ' ', word_text).strip()
+                        matches = table_parent_pattern_start.findall(text_clean)
+                        for match in matches:
+                            table_start2_pages.append(start_page + page_num)
+                        if (len(table_start2_pages) > 0
+                                and table_end_page is None
+                                and table_pattern_end.search(text_clean) is not None):
+                            table_end_page = start_page + page_num
     return table_start_pages, table_start2_pages, table_end_page
 
 
@@ -220,20 +225,20 @@ def get_table1(pdf, start_page, end_page, table_pattern_start, table_parent_patt
                             and table_end_page is None
                             and table_pattern_end.search(text_clean) is not None):
                         table_end_page = start_page + page_num
-    if len(table_parent_start_pages) > 1:
-        for page_num, page in enumerate(pdf.pages[table_parent_start_pages[0] - 1:table_end_page - 1]):
-            words = page.extract_words(keep_blank_chars=True, x_tolerance=40)
-            for word in words:
-                # 提取文案
-                word_text = word.get('text').replace(" ", "")
-                if word_text:
-                    text_clean = re.sub(r'\s+', ' ', word_text).strip()
-                    matches = table_pattern_start.findall(text_clean)
-                    for match in matches:
-                        table_start_pages.append(start_page + page_num)
-                    if (len(table_start_pages) > 0
-                            and table_pattern_end.search(text_clean) is not None):
-                        table_end_page = start_page + page_num
+        if len(table_parent_start_pages) > 1:
+            for page_num, page in enumerate(pdf.pages[table_parent_start_pages[0] - 1:table_end_page - 1]):
+                words = page.extract_words(keep_blank_chars=True, x_tolerance=40)
+                for word in words:
+                    # 提取文案
+                    word_text = word.get('text').replace(" ", "")
+                    if word_text:
+                        text_clean = re.sub(r'\s+', ' ', word_text).strip()
+                        matches = table_pattern_start.findall(text_clean)
+                        for match in matches:
+                            table_start_pages.append(start_page + page_num)
+                        if (len(table_start_pages) > 0
+                                and table_pattern_end.search(text_clean) is not None):
+                            table_end_page = start_page + page_num
     return table_start_pages, table_parent_start_pages, table_end_page
 
 
@@ -259,7 +264,7 @@ def init_worker(c, l):
     lock = l  # 继承锁
 
 
-def main(folder_path, output_file):
+def main(folder_path, output_file, enable_llm=True):
     """主处理函数（多线程版）"""
     # 获取所有PDF文件路径
     pdf_files = [
@@ -267,11 +272,12 @@ def main(folder_path, output_file):
         for f in os.listdir(folder_path)
         if f.lower().endswith('.pdf')
     ]
-    pdf_files = list(
-        filter(lambda s:
-               "TCL科技集团股份有限公司.pdf" in s or
-               "爱玛科技集团股份有限公司.pdf" in s or
-               "111.pdf" in s, pdf_files))
+    # pdf_files = list(
+    #     filter(lambda s:
+    #            "深圳市智莱科技股份有限公司_2024-12-31_年度报告_2025-04-01.pdf" in s or
+    #            "株洲中车时代电气股份有限公司_2024-12-31_年度报告_2025-03-29.pdf" in s or
+    #            "爱玛科技集团股份有限公司.pdf" in s or
+    #            "111.pdf" in s, pdf_files))
 
     counter = Value("i", 0)  # 主进程创建共享变量
     lock = Lock()  # 主进程创建锁
@@ -279,7 +285,7 @@ def main(folder_path, output_file):
     results = []
 
     with ProcessPoolExecutor(max_workers=8, initializer=init_worker, initargs=(counter, lock)) as executor:
-        futures = [executor.submit(process_pdf, path) for path in pdf_files]
+        futures = [executor.submit(process_pdf, path, enable_llm) for path in pdf_files]
     for future in concurrent.futures.as_completed(futures):
         results.append(future.result())
     with pd.ExcelWriter(output_file, engine="openpyxl") as writer:
@@ -290,13 +296,12 @@ def main(folder_path, output_file):
             df = pd.DataFrame(table_result)
             df.to_excel(writer, sheet_name=config.cn_name, index=False)
 
-
 logging.disable(level=logging.WARN)
 if __name__ == '__main__':
     current_time = datetime.now()
     start_time = time.time()  # 记录开始时间
     folder_path = '../../result/annual_report_test'
     output_file = '../../result/分析结果_' + current_time.strftime("%Y%m%d%H%M%S") + '.xlsx'
-    main(folder_path, output_file)
+    main(folder_path, output_file, True)
     end_time = time.time()  # 记录结束时间
     print(f"全部文件处理完成，结果已保存至：{output_file}，耗时: {end_time - start_time:.6f}秒")
