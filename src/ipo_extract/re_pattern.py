@@ -85,4 +85,3 @@ interest_payable_start_pattern = re.compile(
 interest_payable_parent_start_pattern = re.compile(r'\d{1,2}、?\s*预付款项')
 interest_payable_end_pattern = re.compile(
     r'其他说明|其他应收款|存货')
-
