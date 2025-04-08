@@ -188,7 +188,7 @@ def get_table(pdf, start_page, end_page, table_pattern_start, table_parent_patte
                             and table_end_page is None
                             and table_pattern_end.search(text_clean) is not None):
                         table_end_page = start_page + page_num
-        if len(table_start_pages) < 1 and len(table_start2_pages) < 1:
+        if len(table_start_pages) < 1 and len(table_start2_pages) < 1 and table_parent_pattern_start is not None:
             for page_num, page in enumerate(pdf.pages[start_page - 1:end_page - 1]):
                 words = page.extract_words(keep_blank_chars=True, x_tolerance=40)
                 for word in words:

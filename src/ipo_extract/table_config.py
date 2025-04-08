@@ -47,48 +47,48 @@ class TableConfigEnum(Enum):
         re_pattern.other_related_party_parent_start_pattern,
         re_pattern.other_related_party_end_pattern, prompt_constants.prompt16)
 
-    # ENTRUSTED_FINANCIAL_SITUATION = (
-    #     "委托理财情况","1",
-    #     "important_matters",
-    #     "major_contracts",
-    #     re_pattern.entrusted_financial_situation_party_start_pattern,
-    #     re_pattern.entrusted_financial_situation_party_parent_start_pattern,
-    #     re_pattern.entrusted_financial_situation_party_end_pattern,prompt_constants.prompt11)
-    # TRADING_FINANCIAL_ASSETS = (
-    #     "交易性金融资产","1",
-    #     "financial_report",
-    #     "note",
-    #     re_pattern.trading_financial_assets_party_start_pattern,
-    #     re_pattern.trading_financial_assets_party_parent_start_pattern,
-    #     re_pattern.trading_financial_assets_party_end_pattern,prompt_constants.prompt11)
-    # OTHER_CURRENT_ASSETS = (
-    #     "其他流动资产","1",
-    #     "financial_report",
-    #     "note",
-    #     re_pattern.other_current_assets_start_pattern,
-    #     re_pattern.other_current_assets_parent_start_pattern,
-    #     re_pattern.other_current_assets_end_pattern,prompt_constants.prompt11)
-    # SHORT_TERM_BORROWING = (
-    #     "短期借款","1",
-    #     "financial_report",
-    #     "note",
-    #     re_pattern.short_term_borrowing_start_pattern,
-    #     re_pattern.short_term_borrowing_parent_start_pattern,
-    #     re_pattern.short_term_borrowing_end_pattern,prompt_constants.prompt11)
-    # LONG_TERM_BORROWING = (
-    #     "长期借款","1",
-    #     "financial_report",
-    #     "note",
-    #     re_pattern.long_term_borrowing_start_pattern,
-    #     re_pattern.long_term_borrowing_parent_start_pattern,
-    #     re_pattern.long_term_borrowing_end_pattern,prompt_constants.prompt11)
-    # INTEREST_PAYABLE = (
-    #     "应付利息","1",
-    #     "financial_report",
-    #     "note",
-    #     re_pattern.interest_payable_start_pattern,
-    #     re_pattern.interest_payable_parent_start_pattern,
-    #     re_pattern.interest_payable_end_pattern,prompt_constants.prompt11)
+    ENTRUSTED_FINANCIAL_SITUATION = (
+        "委托理财情况","1",
+        "important_matters",
+        "major_contracts",
+        re_pattern.entrusted_financial_situation_party_start_pattern,
+        re_pattern.entrusted_financial_situation_party_parent_start_pattern,
+        re_pattern.entrusted_financial_situation_party_end_pattern,prompt_constants.prompt11)
+    TRADING_FINANCIAL_ASSETS = (
+        "交易性金融资产","1",
+        "financial_report",
+        "note",
+        re_pattern.trading_financial_assets_party_start_pattern,
+        re_pattern.trading_financial_assets_party_parent_start_pattern,
+        re_pattern.trading_financial_assets_party_end_pattern,prompt_constants.prompt11)
+    OTHER_CURRENT_ASSETS = (
+        "其他流动资产","1",
+        "financial_report",
+        "note",
+        re_pattern.other_current_assets_start_pattern,
+        re_pattern.other_current_assets_parent_start_pattern,
+        re_pattern.other_current_assets_end_pattern,prompt_constants.prompt11)
+    SHORT_TERM_BORROWING = (
+        "短期借款","1",
+        "financial_report",
+        "note",
+        re_pattern.short_term_borrowing_start_pattern,
+        re_pattern.short_term_borrowing_parent_start_pattern,
+        re_pattern.short_term_borrowing_end_pattern,prompt_constants.prompt11)
+    LONG_TERM_BORROWING = (
+        "长期借款","1",
+        "financial_report",
+        "note",
+        re_pattern.long_term_borrowing_start_pattern,
+        re_pattern.long_term_borrowing_parent_start_pattern,
+        re_pattern.long_term_borrowing_end_pattern,prompt_constants.prompt11)
+    INTEREST_PAYABLE = (
+        "应付利息","2",
+        "financial_report",
+        "note",
+        re_pattern.interest_payable_start_pattern,
+        re_pattern.interest_payable_parent_start_pattern,
+        re_pattern.interest_payable_end_pattern,prompt_constants.prompt11)
 
     def __init__(self, cn_name, strategy,
                  second_title_all,

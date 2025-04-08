@@ -51,37 +51,37 @@ other_related_party_end_pattern = re.compile(
     r'关联方?交易情况|关联方应收应付款项|其他说明|本公司与关联方主要关联交易')
 # 委托理财情况
 entrusted_financial_situation_party_start_pattern = re.compile(
-    r'按预付对象归集的(期末|年末)余额前五名的预付款项?情况|余额前五名的预付款项')
-entrusted_financial_situation_party_parent_start_pattern = re.compile(r'\d{1,2}、?\s*预付款项')
+    r'委托理财情况')
+entrusted_financial_situation_party_parent_start_pattern = re.compile(r'委托他人进行现金资产管理的情况')
 entrusted_financial_situation_party_end_pattern = re.compile(
-    r'其他说明|其他应收款|存货')
+    r'委托理财减值准备|委托贷款情况|其他重大合同|募集资金使用进展说明')
 # 交易性金融资产
 trading_financial_assets_party_start_pattern = re.compile(
-    r'按预付对象归集的(期末|年末)余额前五名的预付款项?情况|余额前五名的预付款项')
-trading_financial_assets_party_parent_start_pattern = re.compile(r'\d{1,2}、?\s*预付款项')
+    r'\d{1,2}、?\s*交易性金融资产')
+trading_financial_assets_party_parent_start_pattern = None
 trading_financial_assets_party_end_pattern = re.compile(
-    r'其他说明|其他应收款|存货')
+    r'衍生金融资产|应收票据|应收账款')
 # 其他流动资产
 other_current_assets_start_pattern = re.compile(
-    r'按预付对象归集的(期末|年末)余额前五名的预付款项?情况|余额前五名的预付款项')
-other_current_assets_parent_start_pattern = re.compile(r'\d{1,2}、?\s*预付款项')
+    r'\d{1,2}、?\s*其他流动资产')
+other_current_assets_parent_start_pattern = None
 other_current_assets_end_pattern = re.compile(
-    r'其他说明|其他应收款|存货')
+    r'其他说明|债权投资|其他债权投资|长期应收款|长期股权投资')
 # 短期借款
 short_term_borrowing_start_pattern = re.compile(
-    r'按预付对象归集的(期末|年末)余额前五名的预付款项?情况|余额前五名的预付款项')
-short_term_borrowing_parent_start_pattern = re.compile(r'\d{1,2}、?\s*预付款项')
+    r'\d{1,2}、?\s*短期借款')
+short_term_borrowing_parent_start_pattern = None
 short_term_borrowing_end_pattern = re.compile(
-    r'其他说明|其他应收款|存货')
+    r'交易性金融负债|衍生金融负债|应付票据|应付账款')
 # 长期借款
 long_term_borrowing_start_pattern = re.compile(
-    r'按预付对象归集的(期末|年末)余额前五名的预付款项?情况|余额前五名的预付款项')
-long_term_borrowing_parent_start_pattern = re.compile(r'\d{1,2}、?\s*预付款项')
+    r'\d{1,2}、?\s*长期借款')
+long_term_borrowing_parent_start_pattern = None
 long_term_borrowing_end_pattern = re.compile(
-    r'其他说明|其他应收款|存货')
+    r'应付债券|租赁负债|长期应付款|长期应付职工薪酬')
 # 应付利息
 interest_payable_start_pattern = re.compile(
-    r'按预付对象归集的(期末|年末)余额前五名的预付款项?情况|余额前五名的预付款项')
-interest_payable_parent_start_pattern = re.compile(r'\d{1,2}、?\s*预付款项')
+    r'应付利息')
+interest_payable_parent_start_pattern =  re.compile(r'\d{1,2}、?\s*其他应付款')
 interest_payable_end_pattern = re.compile(
-    r'其他说明|其他应收款|存货')
+    r'应付股利|持有待售负债|1\s*年内到期的非流动负债|其他流动负债')
