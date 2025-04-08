@@ -3,27 +3,27 @@ import re_pattern, prompt_constants
 
 
 class TableConfigEnum(Enum):
-    CIP_IMPT_PROJECT_CHANGE = (
-        "在建工程-重要在建工程项目变动", "1",
-        "financial_report",
-        "note",
-        re_pattern.cip_impt_project_change_start_pattern,
-        re_pattern.cip_impt_project_change_parent_start_pattern,
-        re_pattern.cip_impt_project_change_end_pattern, prompt_constants.prompt11)
-    CONTRACT_ASSET_DTL = (
-        "合同资产情况", "1",
-        "financial_report",
-        "note",
-        re_pattern.contract_asset_dtl_start_pattern,
-        re_pattern.contract_asset_dtl_parent_start_pattern,
-        re_pattern.contract_asset_dtl_end_pattern, prompt_constants.prompt12)
-    ADVANCE_PAY_TOP_FIVE_EB = (
-        "预付款项-期末余额前几名单位情况", "1",
-        "financial_report",
-        "note",
-        re_pattern.advance_pay_top_five_eb_start_pattern,
-        re_pattern.advance_pay_top_five_eb_parent_start_pattern,
-        re_pattern.advance_pay_top_five_eb_end_pattern, prompt_constants.prompt13)
+    # CIP_IMPT_PROJECT_CHANGE = (
+    #     "在建工程-重要在建工程项目变动", "1",
+    #     "financial_report",
+    #     "note",
+    #     re_pattern.cip_impt_project_change_start_pattern,
+    #     re_pattern.cip_impt_project_change_parent_start_pattern,
+    #     re_pattern.cip_impt_project_change_end_pattern, prompt_constants.prompt11)
+    # CONTRACT_ASSET_DTL = (
+    #     "合同资产情况", "1",
+    #     "financial_report",
+    #     "note",
+    #     re_pattern.contract_asset_dtl_start_pattern,
+    #     re_pattern.contract_asset_dtl_parent_start_pattern,
+    #     re_pattern.contract_asset_dtl_end_pattern, prompt_constants.prompt12)
+    # ADVANCE_PAY_TOP_FIVE_EB = (
+    #     "预付款项-期末余额前几名单位情况", "1",
+    #     "financial_report",
+    #     "note",
+    #     re_pattern.advance_pay_top_five_eb_start_pattern,
+    #     re_pattern.advance_pay_top_five_eb_parent_start_pattern,
+    #     re_pattern.advance_pay_top_five_eb_end_pattern, prompt_constants.prompt13)
 
     DIFF_CTL_ORG_MG_CUR_PRD = (
         "非同一控制下企业合并-本期发生的非同一控制下企业合并", "2",

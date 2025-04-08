@@ -225,7 +225,7 @@ def get_table1(pdf, start_page, end_page, table_pattern_start, table_parent_patt
                             and table_end_page is None
                             and table_pattern_end.search(text_clean) is not None):
                         table_end_page = start_page + page_num
-        if len(table_parent_start_pages) > 1:
+        if len(table_parent_start_pages) > 0:
             for page_num, page in enumerate(pdf.pages[table_parent_start_pages[0] - 1:table_end_page - 1]):
                 words = page.extract_words(keep_blank_chars=True, x_tolerance=40)
                 for word in words:
@@ -272,12 +272,11 @@ def main(folder_path, output_file, enable_llm=True):
         for f in os.listdir(folder_path)
         if f.lower().endswith('.pdf')
     ]
-    # pdf_files = list(
-    #     filter(lambda s:
-    #            "深圳市智莱科技股份有限公司_2024-12-31_年度报告_2025-04-01.pdf" in s or
-    #            "株洲中车时代电气股份有限公司_2024-12-31_年度报告_2025-03-29.pdf" in s or
-    #            "爱玛科技集团股份有限公司.pdf" in s or
-    #            "111.pdf" in s, pdf_files))
+    pdf_files = list(
+        filter(lambda s:
+               "珠海华发实业股份有限公司_2024-12-31_年度报告_2025-03-18.pdf" in s or
+               "爱玛科技集团股份有限公司.pdf" in s or
+               "111.pdf" in s, pdf_files))
 
     counter = Value("i", 0)  # 主进程创建共享变量
     lock = Lock()  # 主进程创建锁
@@ -302,6 +301,6 @@ if __name__ == '__main__':
     start_time = time.time()  # 记录开始时间
     folder_path = '../../result/annual_report_test'
     output_file = '../../result/分析结果_' + current_time.strftime("%Y%m%d%H%M%S") + '.xlsx'
-    main(folder_path, output_file, True)
+    main(folder_path, output_file, False)
     end_time = time.time()  # 记录结束时间
     print(f"全部文件处理完成，结果已保存至：{output_file}，耗时: {end_time - start_time:.6f}秒")

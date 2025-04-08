@@ -48,7 +48,7 @@ other_related_party_start_pattern = re.compile(
 other_related_party_parent_start_pattern = re.compile(
     r'^\(?(十一|十二|十三|十四|十五|十六)、?\)?\s*(关联方及关联方?交易|关联方关系及其交易)$')
 other_related_party_end_pattern = re.compile(
-    r'关联交易情况|关联方应收应付款项|其他说明|本公司与关联方主要关联交易')
+    r'关联方?交易情况|关联方应收应付款项|其他说明|本公司与关联方主要关联交易')
 # 委托理财情况
 entrusted_financial_situation_party_start_pattern = re.compile(
     r'按预付对象归集的(期末|年末)余额前五名的预付款项?情况|余额前五名的预付款项')
