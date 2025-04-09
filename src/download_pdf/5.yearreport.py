@@ -174,8 +174,8 @@ def getpdffile(data_start_ts, **dsn):
          ,substring(t1.title from  '(\\d{4}).*?年')::integer   as rep_year
          ,t1.create_ts
          ,t1.announ_orig_link 
-         ,row_number() over (partition by company_id,parent_encode,announcement_date 
-         , substring(t1.title from  '(\\d{4}).*?年')::integer order by t1.data_id desc)  as  rn  
+         ,row_number() over (partition by company_id, substring(t1.title from  '(\\d{4}).*?年')::integer
+          order by t1.data_source_code,t1.type_code, t1.data_id desc)  as  rn  
      from s_announcement_title t1
      inner join b_bas_company t2
      on t1.company_id = t2.id
@@ -184,7 +184,7 @@ def getpdffile(data_start_ts, **dsn):
      and type_code IN ('001001003001', '007002', '024004002004')
                              and t1.create_ts>date%s  and t1.create_ts<= %s
      and t1.title ~'\\d{4}.*年度报告'
-     and t1.announcement_date>=date '20240201' 
+     and t1.announcement_date>=date '20241201' 
      and t1.title !~ '摘要|更正公告|半年|季度|英文|取消|专项说明|募集资金|业绩|情况|非标|督导|披露|托管|风险控制|净资本|服务报告|提示|风控|问询函|说明|债券担保方|评估|季报|补充公告|专项意见|更正公告|声明|模拟|3月|6月|9月|资产服务机构报告|资产管理报告|资产运营报告|股份变动|中期|保留意见|清算|反馈意见|赎回|诉讼|变更|摊薄|子公司|债权代理事务|一季|三季|Annual Report' AND not (t1.title ~ '担保人' and t1.title !~ '含担保人') AND not (t1.title ~ '母公司' and title !~ '合并及') AND not (t1.title ~ '本部' and t1.title !~ '合并及')
      ) p  where p.rn =1
                 """, (SCHEDULE_ID,data_start_ts, DATA_END_TS))

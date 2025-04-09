@@ -3,27 +3,27 @@ import re_pattern, prompt_constants
 
 
 class TableConfigEnum(Enum):
-    # CIP_IMPT_PROJECT_CHANGE = (
-    #     "在建工程-重要在建工程项目变动", "1",
-    #     "financial_report",
-    #     "note",
-    #     re_pattern.cip_impt_project_change_start_pattern,
-    #     re_pattern.cip_impt_project_change_parent_start_pattern,
-    #     re_pattern.cip_impt_project_change_end_pattern, prompt_constants.prompt11)
-    # CONTRACT_ASSET_DTL = (
-    #     "合同资产情况", "1",
-    #     "financial_report",
-    #     "note",
-    #     re_pattern.contract_asset_dtl_start_pattern,
-    #     re_pattern.contract_asset_dtl_parent_start_pattern,
-    #     re_pattern.contract_asset_dtl_end_pattern, prompt_constants.prompt12)
-    # ADVANCE_PAY_TOP_FIVE_EB = (
-    #     "预付款项-期末余额前几名单位情况", "1",
-    #     "financial_report",
-    #     "note",
-    #     re_pattern.advance_pay_top_five_eb_start_pattern,
-    #     re_pattern.advance_pay_top_five_eb_parent_start_pattern,
-    #     re_pattern.advance_pay_top_five_eb_end_pattern, prompt_constants.prompt13)
+    CIP_IMPT_PROJECT_CHANGE = (
+        "在建工程-重要在建工程项目变动", "1",
+        "financial_report",
+        "note",
+        re_pattern.cip_impt_project_change_start_pattern,
+        re_pattern.cip_impt_project_change_parent_start_pattern,
+        re_pattern.cip_impt_project_change_end_pattern, prompt_constants.prompt11)
+    CONTRACT_ASSET_DTL = (
+        "合同资产情况", "1",
+        "financial_report",
+        "note",
+        re_pattern.contract_asset_dtl_start_pattern,
+        re_pattern.contract_asset_dtl_parent_start_pattern,
+        re_pattern.contract_asset_dtl_end_pattern, prompt_constants.prompt12)
+    ADVANCE_PAY_TOP_FIVE_EB = (
+        "预付款项-期末余额前几名单位情况", "1",
+        "financial_report",
+        "note",
+        re_pattern.advance_pay_top_five_eb_start_pattern,
+        re_pattern.advance_pay_top_five_eb_parent_start_pattern,
+        re_pattern.advance_pay_top_five_eb_end_pattern, prompt_constants.prompt13)
 
     DIFF_CTL_ORG_MG_CUR_PRD = (
         "非同一控制下企业合并-本期发生的非同一控制下企业合并", "2",
@@ -53,42 +53,42 @@ class TableConfigEnum(Enum):
         "major_contracts",
         re_pattern.entrusted_financial_situation_party_start_pattern,
         re_pattern.entrusted_financial_situation_party_parent_start_pattern,
-        re_pattern.entrusted_financial_situation_party_end_pattern,prompt_constants.prompt11)
+        re_pattern.entrusted_financial_situation_party_end_pattern,prompt_constants.prompt171)
     TRADING_FINANCIAL_ASSETS = (
         "交易性金融资产","1",
         "financial_report",
         "note",
         re_pattern.trading_financial_assets_party_start_pattern,
         re_pattern.trading_financial_assets_party_parent_start_pattern,
-        re_pattern.trading_financial_assets_party_end_pattern,prompt_constants.prompt11)
+        re_pattern.trading_financial_assets_party_end_pattern,prompt_constants.prompt172)
     OTHER_CURRENT_ASSETS = (
         "其他流动资产","1",
         "financial_report",
         "note",
         re_pattern.other_current_assets_start_pattern,
         re_pattern.other_current_assets_parent_start_pattern,
-        re_pattern.other_current_assets_end_pattern,prompt_constants.prompt11)
+        re_pattern.other_current_assets_end_pattern,prompt_constants.prompt173)
     SHORT_TERM_BORROWING = (
         "短期借款","1",
         "financial_report",
         "note",
         re_pattern.short_term_borrowing_start_pattern,
         re_pattern.short_term_borrowing_parent_start_pattern,
-        re_pattern.short_term_borrowing_end_pattern,prompt_constants.prompt11)
+        re_pattern.short_term_borrowing_end_pattern,prompt_constants.prompt181)
     LONG_TERM_BORROWING = (
         "长期借款","1",
         "financial_report",
         "note",
         re_pattern.long_term_borrowing_start_pattern,
         re_pattern.long_term_borrowing_parent_start_pattern,
-        re_pattern.long_term_borrowing_end_pattern,prompt_constants.prompt11)
+        re_pattern.long_term_borrowing_end_pattern,prompt_constants.prompt182)
     INTEREST_PAYABLE = (
         "应付利息","2",
         "financial_report",
         "note",
         re_pattern.interest_payable_start_pattern,
         re_pattern.interest_payable_parent_start_pattern,
-        re_pattern.interest_payable_end_pattern,prompt_constants.prompt11)
+        re_pattern.interest_payable_end_pattern,prompt_constants.prompt183)
 
     def __init__(self, cn_name, strategy,
                  second_title_all,
