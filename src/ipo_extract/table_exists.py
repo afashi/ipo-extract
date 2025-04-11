@@ -318,6 +318,8 @@ def main(folder_path, output_file, enable_llm=True):
     #            "爱玛科技集团股份有限公司.pdf" in s or
     #            "111.pdf" in s, pdf_files))
 
+    pdf_files = pdf_files[:min(100, len(pdf_files))]
+
     counter = Value("i", 0)  # 主进程创建共享变量
     lock = Lock()  # 主进程创建锁
     # 多线程处理
